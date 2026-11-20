@@ -20,6 +20,9 @@ const emptyMessage = document.getElementById("empty-message");
 const entryTable = document.getElementById("entry-table");
 const entryTableBody = document.getElementById("entry-table-body");
 
+// F4: Date of the entry whose "Delete?" question is currently shown (null = none)
+let dateToConfirmDelete = null;
+
 // Returns today's date as text in the format "YYYY-MM-DD"
 function getTodayAsText() {
   const today = new Date();
@@ -150,6 +153,83 @@ function createLevelCell(level) {
   return cell;
 }
 
+// Removes the entry with this date from the entries array
+function deleteEntryByDate(date) {
+  const index = findEntryIndexByDate(date);
+  if (index !== -1) {
+    entries.splice(index, 1);
+  }
+}
+
+// Shows the "Delete?" question in the row of this entry
+function askToDelete(date) {
+  dateToConfirmDelete = date;
+  render();
+  // Put the keyboard focus on "No", so a keyboard user can answer right away
+  document.getElementById("cancel-delete-button").focus();
+}
+
+// "Yes" was clicked: really delete the entry
+function confirmDelete(date) {
+  deleteEntryByDate(date);
+  dateToConfirmDelete = null;
+  render();
+}
+
+// "No" was clicked: hide the question again, nothing is deleted
+function cancelDelete() {
+  dateToConfirmDelete = null;
+  render();
+}
+
+// Creates a small button with the given text and extra CSS class
+function createSmallButton(text, extraClass) {
+  const button = document.createElement("button");
+  button.type = "button";
+  button.textContent = text;
+  button.className = "small-button " + extraClass;
+  return button;
+}
+
+// Puts the question "Delete?" with a "Yes" and a "No" button into the cell
+function addConfirmButtons(cell, date) {
+  const question = document.createElement("span");
+  question.textContent = "Delete?";
+  question.className = "confirm-question";
+
+  const yesButton = createSmallButton("Yes", "");
+  yesButton.addEventListener("click", function () {
+    confirmDelete(date);
+  });
+
+  const noButton = createSmallButton("No", "outline-button");
+  noButton.id = "cancel-delete-button";
+  noButton.addEventListener("click", cancelDelete);
+
+  cell.appendChild(question);
+  cell.appendChild(yesButton);
+  cell.appendChild(noButton);
+}
+
+// Creates the last cell of a row: a "Delete" button, or the "Delete?" question
+function createDeleteCell(entry) {
+  const cell = document.createElement("td");
+  cell.className = "actions-cell";
+
+  if (entry.date === dateToConfirmDelete) {
+    addConfirmButtons(cell, entry.date);
+    return cell;
+  }
+
+  const deleteButton = createSmallButton("Delete", "outline-button");
+  deleteButton.setAttribute("aria-label", "Delete entry for " + entry.date);
+  deleteButton.addEventListener("click", function () {
+    askToDelete(entry.date);
+  });
+  cell.appendChild(deleteButton);
+  return cell;
+}
+
 // Creates one table row (<tr>) for an entry
 function createTableRow(entry) {
   let sleepText = "–";
@@ -163,6 +243,7 @@ function createTableRow(entry) {
   row.appendChild(createLevelCell(entry.fatigue));
   row.appendChild(createCell(sleepText));
   row.appendChild(createCell(entry.note));
+  row.appendChild(createDeleteCell(entry));
   return row;
 }
 

@@ -165,6 +165,38 @@ th {
   background-color: var(--severity-high);
 }
 
+/* F4: Smaller buttons inside the table (still big enough to tap) */
+.small-button {
+  min-height: 44px;
+  padding: 6px 14px;
+  font-size: 16px;
+}
+
+/* White button with accent-coloured border ("Delete", "No") */
+.outline-button {
+  color: var(--accent-color);
+  background-color: var(--card-color);
+  border: 2px solid var(--accent-color);
+}
+
+.outline-button:hover {
+  color: white;
+  background-color: var(--accent-color);
+}
+
+/* Keep the "Delete?  Yes  No" question on one line */
+.actions-cell {
+  white-space: nowrap;
+}
+
+.actions-cell .small-button {
+  margin-left: 6px;
+}
+
+.confirm-question {
+  font-weight: bold;
+}
+
 /* Clearly visible focus frame for keyboard users */
 button:focus-visible,
 input:focus-visible,
