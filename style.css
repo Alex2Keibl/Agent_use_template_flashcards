@@ -9,6 +9,10 @@
   --card-color: #ffffff;
   --border-color: #c9ced6;
 
+  /* Line colours in the chart (not green/yellow/red) */
+  --pain-color: #3949ab;
+  --fatigue-color: #a0307c;
+
   /* Severity colours (used from step 4 on) */
   --severity-low: #c8e6c9;
   --severity-medium: #fff3b0;
@@ -163,6 +167,90 @@ input[type="range"] {
 .summary-hint {
   font-size: 15px;
   color: var(--muted-text-color);
+}
+
+/* F8: Chart */
+#chart-box {
+  margin-bottom: 24px;
+}
+
+#chart-box h3 {
+  margin: 0 0 8px 0;
+  font-size: 18px;
+}
+
+#chart {
+  display: block;
+  width: 100%;
+  height: auto;
+}
+
+/* Legend above the chart */
+.chart-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  margin-bottom: 8px;
+  font-size: 16px;
+}
+
+.legend-swatch {
+  display: inline-block;
+  width: 24px;
+  height: 4px;
+  vertical-align: middle;
+}
+
+.pain-swatch {
+  background-color: var(--pain-color);
+}
+
+.fatigue-swatch {
+  background-color: var(--fatigue-color);
+}
+
+.bad-day-swatch {
+  height: 0;
+  border-top: 3px dashed var(--muted-text-color);
+}
+
+/* Parts of the SVG drawing */
+.chart-grid {
+  stroke: var(--border-color);
+  stroke-width: 1;
+}
+
+.chart-bad-day {
+  stroke: var(--muted-text-color);
+  stroke-width: 2;
+  stroke-dasharray: 8 6;
+}
+
+.chart-label {
+  font-size: 16px;
+  fill: var(--muted-text-color);
+}
+
+.pain-line,
+.fatigue-line {
+  fill: none;
+  stroke-width: 3;
+}
+
+.pain-line {
+  stroke: var(--pain-color);
+}
+
+.fatigue-line {
+  stroke: var(--fatigue-color);
+}
+
+.pain-point {
+  fill: var(--pain-color);
+}
+
+.fatigue-point {
+  fill: var(--fatigue-color);
 }
 
 /* Friendly message when there are no entries yet */

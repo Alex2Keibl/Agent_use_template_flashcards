@@ -31,6 +31,14 @@ const fatigueAverageText = document.getElementById("fatigue-average");
 const fatigueLowestText = document.getElementById("fatigue-lowest");
 const fatigueHighestText = document.getElementById("fatigue-highest");
 const badDaysCountText = document.getElementById("bad-days-count");
+const chartBox = document.getElementById("chart-box");
+const chartSvg = document.getElementById("chart");
+
+// F8: Size of the drawing area inside the SVG (in SVG units, see viewBox="0 0 600 300")
+const chartLeft = 50;
+const chartRight = 580;
+const chartTop = 20;
+const chartBottom = 250;
 
 // F4: Date of the entry whose "Delete?" question is currently shown (null = none)
 let dateToConfirmDelete = null;
@@ -409,6 +417,93 @@ function renderSummary(entryList) {
   badDaysCountText.textContent = countBadDays(entryList);
 }
 
+// Creates an SVG element (e.g. "line") with the given attributes and adds it to the chart.
+// SVG elements need createElementNS instead of createElement.
+function addSvgElement(tagName, attributes) {
+  const element = document.createElementNS("http://www.w3.org/2000/svg", tagName);
+  for (const name in attributes) {
+    element.setAttribute(name, attributes[name]);
+  }
+  chartSvg.appendChild(element);
+  return element;
+}
+
+// Returns the y position for a level from 0 to 10 (0 = bottom, 10 = top)
+function getChartY(level) {
+  const chartHeight = chartBottom - chartTop;
+  return chartBottom - (level / 10) * chartHeight;
+}
+
+// Returns the x position of the point number "index" when there are "count" points
+function getChartX(index, count) {
+  if (count === 1) {
+    return (chartLeft + chartRight) / 2;
+  }
+  const step = (chartRight - chartLeft) / (count - 1);
+  return chartLeft + index * step;
+}
+
+// Draws the y-axis: grey lines and numbers for 0, 2, 4, 6, 8, 10
+function drawYAxis() {
+  for (let level = 0; level <= 10; level = level + 2) {
+    const y = getChartY(level);
+    addSvgElement("line", { x1: chartLeft, y1: y, x2: chartRight, y2: y, class: "chart-grid" });
+    const label = addSvgElement("text", { x: chartLeft - 12, y: y + 5, class: "chart-label", "text-anchor": "end" });
+    label.textContent = level;
+  }
+}
+
+// Draws the dashed line at 7 with the label "bad day"
+function drawBadDayLine() {
+  const y = getChartY(7);
+  addSvgElement("line", { x1: chartLeft, y1: y, x2: chartRight, y2: y, class: "chart-bad-day" });
+  const label = addSvgElement("text", { x: chartRight, y: y - 6, class: "chart-label", "text-anchor": "end" });
+  label.textContent = "bad day";
+}
+
+// Writes the dates under the x-axis (only some of them if there are many)
+function drawXLabels(entryList) {
+  // Show at most about 7 dates, so they do not overlap
+  const labelStep = Math.ceil(entryList.length / 7);
+
+  for (let i = 0; i < entryList.length; i = i + labelStep) {
+    const x = getChartX(i, entryList.length);
+    const label = addSvgElement("text", { x: x, y: chartBottom + 30, class: "chart-label", "text-anchor": "middle" });
+    // Show only month and day, e.g. "11-14" instead of "2026-11-14"
+    label.textContent = entryList[i].date.slice(5);
+  }
+}
+
+// Draws one line (pain or fatigue) with a small dot for every day
+function drawDataLine(entryList, fieldName) {
+  // Add the line first, so the dots are drawn on top of it
+  const line = addSvgElement("polyline", { class: fieldName + "-line" });
+
+  let points = "";
+  for (let i = 0; i < entryList.length; i++) {
+    const x = getChartX(i, entryList.length);
+    const y = getChartY(entryList[i][fieldName]);
+    points = points + x + "," + y + " ";
+    addSvgElement("circle", { cx: x, cy: y, r: 5, class: fieldName + "-point" });
+  }
+  line.setAttribute("points", points);
+}
+
+// F8: Draws the whole chart for the given entries (they come newest first)
+function renderChart(entryList) {
+  // Remove the old drawing first
+  chartSvg.innerHTML = "";
+
+  // The chart goes from left (oldest) to right (newest), so we reverse a copy
+  const oldestFirst = entryList.slice().reverse();
+
+  drawYAxis();
+  drawBadDayLine();
+  drawXLabels(oldestFirst);
+  drawDataLine(oldestFirst, "pain");
+  drawDataLine(oldestFirst, "fatigue");
+}
+
 // Shows the friendly message instead of the summary and the table
 function showEmptyMessage() {
   if (entries.length === 0) {
@@ -418,11 +513,12 @@ function showEmptyMessage() {
   }
   emptyMessage.hidden = false;
   summaryBox.hidden = true;
+  chartBox.hidden = true;
   entryTable.hidden = true;
 }
 
-// Draws everything in the "My days" section again.
-// Is called after every change. (The chart is added in a later step.)
+// Draws everything in the "My days" section again: summary, chart and table.
+// Is called after every change.
 function render() {
   updatePeriodButtons();
   const entriesToShow = getEntriesInPeriod(getSortedEntries());
@@ -434,8 +530,10 @@ function render() {
 
   emptyMessage.hidden = true;
   summaryBox.hidden = false;
+  chartBox.hidden = false;
   entryTable.hidden = false;
   renderSummary(entriesToShow);
+  renderChart(entriesToShow);
   renderTable(entriesToShow);
 }
 

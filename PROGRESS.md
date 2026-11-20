@@ -9,11 +9,12 @@
 - Schritt 6: F5 – localStorage (Key "painFatigueEntries"), speichern nach Hinzufügen/Ersetzen/Löschen, laden beim Seitenstart
 - Schritt 7: F7 – Zeitraum-Buttons (7 / 30 Tage / All, Start: All), gewählter Button hervorgehoben (aria-pressed), Tabelle zeigt nur Zeitraum
 - Schritt 8: F6 – Zusammenfassung (Ø/min/max Schmerz + Erschöpfung, Bad days), Ø mit 1 Nachkommastelle, bezieht sich auf gewählten Zeitraum, bei 0 Einträgen ausgeblendet
+- Schritt 9: F8 – SVG-Liniendiagramm (von Hand), y-Achse immer 0–10, gestrichelte Linie bei 7, Legende, Pain blau / Fatigue beere, älteste links
 
 ## Next
-Schritt 9: F8 – SVG-Liniendiagramm
+Schritt 10: F9 – "Load file" (Textdatei importieren)
 
 ## Decisions & notes
-
+Diagramm: Punkte gleichmäßig verteilt, nicht nach echtem Zeitabstand
 
 ## Known problems

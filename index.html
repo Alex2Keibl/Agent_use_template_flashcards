@@ -88,6 +88,18 @@
         </div>
       </div>
 
+      <!-- F8: Liniendiagramm (wird in script.js mit SVG gezeichnet) -->
+      <div id="chart-box">
+        <h3>Pain and fatigue over time</h3>
+        <div class="chart-legend">
+          <span class="legend-item"><span class="legend-swatch pain-swatch"></span> Pain</span>
+          <span class="legend-item"><span class="legend-swatch fatigue-swatch"></span> Fatigue</span>
+          <span class="legend-item"><span class="legend-swatch bad-day-swatch"></span> Bad day (7)</span>
+        </div>
+        <svg id="chart" viewBox="0 0 600 300" role="img"
+             aria-label="Line chart of pain and fatigue over time, scale 0 to 10"></svg>
+      </div>
+
       <!-- Wird angezeigt, solange es noch keine Einträge gibt -->
       <p id="empty-message">No entries yet. Save your first day above.</p>
 
