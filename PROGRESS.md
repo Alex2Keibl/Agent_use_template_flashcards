@@ -6,10 +6,12 @@
 - Schritt 3: F2 – Tabelle (Date, Pain, Fatigue, Sleep, Note), neuestes Datum oben, render() als zentrale Anzeige-Funktion, Meldung bei leerer Liste
 - Schritt 4: F3 – Pain-/Fatigue-Zellen nach Schwere gefärbt (getSeverityClass, createLevelCell), Farben nur dafür verwendet
 - Schritt 5: F4 – Löschen mit Rückfrage in der Zeile ("Delete? Yes / No"), Fokus auf "No", Löschen über das Datum
+- Schritt 6: F5 – localStorage (Key "painFatigueEntries"), speichern nach Hinzufügen/Ersetzen/Löschen, laden beim Seitenstart
 
 ## Next
- Schritt 6: F5 – Speichern in localStorage
+ Schritt 7: F7 – Zeitraum-Buttons (7 Tage, 30 Tage, All)
 
 ## Decisions & notes
 
 ## Known problems
+Beschädigte Daten in localStorage würden die Seite stoppen (kein try/catch)

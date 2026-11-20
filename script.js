@@ -23,6 +23,30 @@ const entryTableBody = document.getElementById("entry-table-body");
 // F4: Date of the entry whose "Delete?" question is currently shown (null = none)
 let dateToConfirmDelete = null;
 
+// F5: Name under which the entries are stored in localStorage
+const storageKey = "painFatigueEntries";
+
+// Saves the entries array in localStorage (as JSON text)
+function saveEntriesToStorage() {
+  const entriesAsText = JSON.stringify(entries);
+  localStorage.setItem(storageKey, entriesAsText);
+}
+
+// Loads saved entries from localStorage into the entries array
+function loadEntriesFromStorage() {
+  const entriesAsText = localStorage.getItem(storageKey);
+
+  // Nothing saved yet (first visit)
+  if (entriesAsText === null) {
+    return;
+  }
+
+  const savedEntries = JSON.parse(entriesAsText);
+  for (let i = 0; i < savedEntries.length; i++) {
+    entries.push(savedEntries[i]);
+  }
+}
+
 // Returns today's date as text in the format "YYYY-MM-DD"
 function getTodayAsText() {
   const today = new Date();
@@ -90,10 +114,12 @@ function saveEntry(entry) {
 
   if (existingIndex === -1) {
     entries.push(entry);
+    saveEntriesToStorage();
     return false;
   }
 
   entries[existingIndex] = entry;
+  saveEntriesToStorage();
   return true;
 }
 
@@ -158,6 +184,7 @@ function deleteEntryByDate(date) {
   const index = findEntryIndexByDate(date);
   if (index !== -1) {
     entries.splice(index, 1);
+    saveEntriesToStorage();
   }
 }
 
@@ -301,6 +328,7 @@ entryForm.addEventListener("submit", handleEntrySubmit);
 painInput.addEventListener("input", showSliderValues);
 fatigueInput.addEventListener("input", showSliderValues);
 
-// When the page opens: prepare the form (date = today) and draw the table
+// When the page opens: load saved entries, prepare the form (date = today) and draw the table
+loadEntriesFromStorage();
 resetForm();
 render();
