@@ -51,6 +51,19 @@ h2 {
   color: var(--muted-text-color);
 }
 
+/* F9/F10: Buttons below the page title */
+.header-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-top: 16px;
+}
+
+/* Message after loading a file */
+#import-message {
+  color: var(--muted-text-color);
+}
+
 /* White box used for each section of the page */
 .card {
   margin-bottom: 24px;

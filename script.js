@@ -31,6 +31,9 @@ const fatigueAverageText = document.getElementById("fatigue-average");
 const fatigueLowestText = document.getElementById("fatigue-lowest");
 const fatigueHighestText = document.getElementById("fatigue-highest");
 const badDaysCountText = document.getElementById("bad-days-count");
+const loadFileButton = document.getElementById("load-file-button");
+const fileInput = document.getElementById("file-input");
+const importMessage = document.getElementById("import-message");
 const chartBox = document.getElementById("chart-box");
 const chartSvg = document.getElementById("chart");
 
@@ -537,6 +540,125 @@ function render() {
   renderTable(entriesToShow);
 }
 
+// ---------- F9: Load entries from a text file ----------
+// File format (first line is the header, one line per day):
+// date;pain;fatigue;sleep;note
+// 2026-11-01;4;5;7;
+// 2026-11-02;6;7;5.5;bad night
+
+// Returns the part number "index" of a line without spaces, or "" if it is missing
+function getPart(parts, index) {
+  if (index >= parts.length) {
+    return "";
+  }
+  return parts[index].trim();
+}
+
+// Turns a pain or fatigue text into a number. Empty text gives -1 (= not valid).
+function parseLevel(text) {
+  if (text === "") {
+    return -1;
+  }
+  return Number(text);
+}
+
+// Checks if a text is a real date in the format "YYYY-MM-DD"
+function isValidDateText(text) {
+  if (text.length !== 10 || text.charAt(4) !== "-" || text.charAt(7) !== "-") {
+    return false;
+  }
+  // Date.parse gives NaN ("not a number") for dates like "2026-13-45"
+  return Number.isNaN(Date.parse(text)) === false;
+}
+
+// Checks if the sleep text is empty or a number from 0 to 24
+function isValidSleepText(text) {
+  if (text === "") {
+    return true;
+  }
+  const hours = Number(text);
+  return Number.isNaN(hours) === false && hours >= 0 && hours <= 24;
+}
+
+// Turns one line of the file into an entry object, or returns null if a value is wrong
+function parseLine(line) {
+  const parts = line.split(";");
+  const date = getPart(parts, 0);
+  const pain = parseLevel(getPart(parts, 1));
+  const fatigue = parseLevel(getPart(parts, 2));
+  const sleepText = getPart(parts, 3);
+
+  if (isValidDateText(date) === false || isValidLevel(pain) === false ||
+      isValidLevel(fatigue) === false || isValidSleepText(sleepText) === false) {
+    return null;
+  }
+
+  let sleep = null;
+  if (sleepText !== "") {
+    sleep = Number(sleepText);
+  }
+  return { date: date, pain: pain, fatigue: fatigue, sleep: sleep, note: getPart(parts, 4) };
+}
+
+// Shows how many lines were imported, skipped (wrong values) or already existed
+function showImportMessage(importedCount, skippedCount, existingCount) {
+  let text = importedCount + " entries loaded.";
+  if (skippedCount > 0) {
+    text = text + " " + skippedCount + " lines skipped because of wrong values.";
+  }
+  if (existingCount > 0) {
+    text = text + " " + existingCount + " days already existed and were kept.";
+  }
+  importMessage.textContent = text;
+}
+
+// Reads all lines of the file text and adds the valid, new entries
+function importText(fileText) {
+  const lines = fileText.split("\n");
+  let importedCount = 0;
+  let skippedCount = 0;
+  let existingCount = 0;
+
+  // Start at 1, because line 0 is the header
+  for (let i = 1; i < lines.length; i++) {
+    const line = lines[i].trim();
+    if (line === "") {
+      continue; // empty lines are simply ignored
+    }
+
+    const entry = parseLine(line);
+    if (entry === null) {
+      skippedCount = skippedCount + 1;
+    } else if (findEntryIndexByDate(entry.date) !== -1) {
+      existingCount = existingCount + 1; // existing entries stay unchanged
+    } else {
+      entries.push(entry);
+      importedCount = importedCount + 1;
+    }
+  }
+
+  saveEntriesToStorage();
+  render();
+  showImportMessage(importedCount, skippedCount, existingCount);
+}
+
+// Runs when a file was chosen in the file picker: reads it with FileReader
+function handleFileChosen() {
+  const file = fileInput.files[0];
+  if (file === undefined) {
+    return;
+  }
+
+  const reader = new FileReader();
+  reader.addEventListener("load", function () {
+    importText(reader.result);
+  });
+  reader.readAsText(file);
+
+  // Reset the file field, so the same file can be chosen again later
+  fileInput.value = "";
+}
+
 // Runs when the "Save entry" button is clicked
 function handleEntrySubmit(event) {
   // Stop the browser from reloading the page
@@ -572,6 +694,12 @@ period30Button.addEventListener("click", function () {
 periodAllButton.addEventListener("click", function () {
   selectPeriod(0);
 });
+
+// F9: The button opens the (invisible) file picker
+loadFileButton.addEventListener("click", function () {
+  fileInput.click();
+});
+fileInput.addEventListener("change", handleFileChosen);
 
 // When the page opens: load saved entries, prepare the form (date = today) and draw the table
 loadEntriesFromStorage();

@@ -10,11 +10,14 @@
 - Schritt 7: F7 – Zeitraum-Buttons (7 / 30 Tage / All, Start: All), gewählter Button hervorgehoben (aria-pressed), Tabelle zeigt nur Zeitraum
 - Schritt 8: F6 – Zusammenfassung (Ø/min/max Schmerz + Erschöpfung, Bad days), Ø mit 1 Nachkommastelle, bezieht sich auf gewählten Zeitraum, bei 0 Einträgen ausgeblendet
 - Schritt 9: F8 – SVG-Liniendiagramm (von Hand), y-Achse immer 0–10, gestrichelte Linie bei 7, Legende, Pain blau / Fatigue beere, älteste links
+- Schritt 10: F9 – "Load file" mit FileReader, Format date;pain;fatigue;sleep;note, falsche Zeilen übersprungen + gezählt, vorhandene Daten bleiben
+
 
 ## Next
-Schritt 10: F9 – "Load file" (Textdatei importieren)
+Schritt 11: F10 – "Load sample data" (letzte 14 Tage)
 
 ## Decisions & notes
-Diagramm: Punkte gleichmäßig verteilt, nicht nach echtem Zeitabstand
+- Schlaf mit Komma (5,5) wird als falsch übersprungen
+- ";" in der Notiz schneidet den Rest ab
 
 ## Known problems

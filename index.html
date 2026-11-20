@@ -11,6 +11,14 @@
   <header>
     <h1>My Pain and Fatigue Diary</h1>
     <p class="intro">Log your pain and fatigue once a day. All data stays in this browser.</p>
+
+    <!-- F9: Einträge aus einer Textdatei laden -->
+    <div class="header-buttons">
+      <button type="button" id="load-file-button" class="outline-button">Load file</button>
+      <!-- Unsichtbares Datei-Feld, wird über den Button geöffnet -->
+      <input type="file" id="file-input" accept=".txt,.csv,text/plain" hidden>
+    </div>
+    <p id="import-message" role="status"></p>
   </header>
 
   <main>
