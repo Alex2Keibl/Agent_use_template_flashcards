@@ -32,15 +32,39 @@ function clearForm() {
   englishInput.focus();
 }
 
+// Removes the word pair at the given position and updates the list
+function deleteWordPair(index) {
+  wordPairs.splice(index, 1);
+  showWordList();
+}
+
+// Creates one list row: the word pair text and a "Delete" button
+function createListItem(pair, index) {
+  const listItem = document.createElement("li");
+
+  const pairText = document.createElement("span");
+  pairText.textContent = pair.english + " – " + pair.german;
+
+  const deleteButton = document.createElement("button");
+  deleteButton.type = "button";
+  deleteButton.textContent = "Delete";
+  deleteButton.className = "delete-button";
+  deleteButton.addEventListener("click", function () {
+    deleteWordPair(index);
+  });
+
+  listItem.appendChild(pairText);
+  listItem.appendChild(deleteButton);
+  return listItem;
+}
+
 // Shows all word pairs from the wordPairs array in the list on the page
 function showWordList() {
   // Remove the old list entries first, so nothing appears twice
   wordList.innerHTML = "";
 
   for (let i = 0; i < wordPairs.length; i++) {
-    const pair = wordPairs[i];
-    const listItem = document.createElement("li");
-    listItem.textContent = pair.english + " – " + pair.german;
+    const listItem = createListItem(wordPairs[i], i);
     wordList.appendChild(listItem);
   }
 }

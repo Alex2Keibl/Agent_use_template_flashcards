@@ -92,12 +92,29 @@ h2 {
 
 /* One word pair per row, with a thin line between rows */
 #word-list li {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
   padding: 10px 0;
   border-bottom: 1px solid var(--border-color);
 }
 
 #word-list li:last-child {
   border-bottom: none;
+}
+
+/* Small "Delete" button: white with accent-coloured border and text */
+.delete-button {
+  padding: 6px 12px;
+  font-size: 14px;
+  color: var(--accent-color);
+  background-color: var(--card-color);
+  border: 1px solid var(--accent-color);
+}
+
+.delete-button:hover {
+  color: white;
+  background-color: var(--accent-color);
 }
 
 /* Message below the form ("Added: ..." or "Please fill in ...") */
