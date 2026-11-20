@@ -1,0 +1,126 @@
+/* Colours used on the whole page.
+   One accent colour (calm blue). Green, yellow and red are ONLY for severity. */
+:root {
+  --accent-color: #3949ab;
+  --accent-color-dark: #283593;
+  --text-color: #1f2328;
+  --muted-text-color: #5a6270;
+  --background-color: #f3f4f7;
+  --card-color: #ffffff;
+  --border-color: #c9ced6;
+
+  /* Severity colours (used from step 4 on) */
+  --severity-low: #c8e6c9;
+  --severity-medium: #fff3b0;
+  --severity-high: #ffcdd2;
+}
+
+/* Basic page layout: one column, max. 700px wide, centred */
+body {
+  max-width: 700px;
+  margin: 32px auto;
+  padding: 0 16px;
+  font-family: Arial, Helvetica, sans-serif;
+  font-size: 18px;
+  line-height: 1.5;
+  color: var(--text-color);
+  background-color: var(--background-color);
+}
+
+h1 {
+  margin-bottom: 4px;
+  color: var(--accent-color);
+}
+
+h2 {
+  margin-top: 0;
+}
+
+.intro {
+  margin-top: 0;
+  color: var(--muted-text-color);
+}
+
+/* White box used for each section of the page */
+.card {
+  margin-bottom: 24px;
+  padding: 24px;
+  background-color: var(--card-color);
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+/* Large, touch-friendly buttons in the accent colour */
+button {
+  min-height: 48px;
+  padding: 10px 20px;
+  font-size: 18px;
+  font-weight: bold;
+  color: white;
+  background-color: var(--accent-color);
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+button:hover {
+  background-color: var(--accent-color-dark);
+}
+
+/* Large, readable input fields */
+input,
+textarea {
+  min-height: 48px;
+  padding: 10px;
+  font-size: 18px;
+  font-family: inherit;
+  border: 1px solid var(--border-color);
+  border-radius: 8px;
+}
+
+/* One form field: label on top, input below */
+.form-row {
+  display: flex;
+  flex-direction: column;
+  margin-bottom: 20px;
+}
+
+label {
+  margin-bottom: 6px;
+  font-weight: bold;
+}
+
+/* Number next to the slider label */
+output {
+  color: var(--accent-color);
+}
+
+/* Sliders: wide and easy to grab, in the accent colour */
+input[type="range"] {
+  width: 100%;
+  min-height: 48px;
+  padding: 0;
+  border: none;
+  accent-color: var(--accent-color);
+  cursor: pointer;
+}
+
+/* "Save entry" button over the full width */
+#entry-form button {
+  width: 100%;
+}
+
+/* Message below the form ("Entry ... was saved.") */
+#form-message {
+  margin-bottom: 0;
+  color: var(--muted-text-color);
+}
+
+/* Clearly visible focus frame for keyboard users */
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible {
+  outline: 3px solid var(--accent-color);
+  outline-offset: 2px;
+}
