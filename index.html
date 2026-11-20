@@ -54,9 +54,28 @@
       <p id="form-message" role="status"></p>
     </section>
 
-    <!-- F6–F8, F2: Zusammenfassung, Diagramm und Tabelle (kommen in späteren Schritten) -->
+    <!-- F6–F8: Zusammenfassung und Diagramm (kommen in späteren Schritten) -->
     <section id="results-section" class="card">
       <h2>My days</h2>
+
+      <!-- Wird angezeigt, solange es noch keine Einträge gibt -->
+      <p id="empty-message">No entries yet. Save your first day above.</p>
+
+      <!-- F2: Tabelle aller Einträge, neuestes Datum oben -->
+      <div class="table-wrapper">
+        <table id="entry-table">
+          <thead>
+            <tr>
+              <th scope="col">Date</th>
+              <th scope="col">Pain</th>
+              <th scope="col">Fatigue</th>
+              <th scope="col">Sleep (h)</th>
+              <th scope="col">Note</th>
+            </tr>
+          </thead>
+          <tbody id="entry-table-body"></tbody>
+        </table>
+      </div>
     </section>
   </main>
 

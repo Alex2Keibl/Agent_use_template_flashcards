@@ -16,6 +16,9 @@ const fatigueValue = document.getElementById("fatigue-value");
 const sleepInput = document.getElementById("sleep-input");
 const noteInput = document.getElementById("note-input");
 const formMessage = document.getElementById("form-message");
+const emptyMessage = document.getElementById("empty-message");
+const entryTable = document.getElementById("entry-table");
+const entryTableBody = document.getElementById("entry-table-body");
 
 // Returns today's date as text in the format "YYYY-MM-DD"
 function getTodayAsText() {
@@ -102,6 +105,76 @@ function checkEntry(entry) {
   return "";
 }
 
+// Compares two entries by date, so that the newest date comes first.
+// "YYYY-MM-DD" texts can be compared directly ("2026-11-14" > "2026-11-02").
+function compareNewestFirst(entryA, entryB) {
+  if (entryA.date < entryB.date) {
+    return 1;
+  }
+  if (entryA.date > entryB.date) {
+    return -1;
+  }
+  return 0;
+}
+
+// Returns a sorted copy of all entries (newest first). The original array stays unchanged.
+function getSortedEntries() {
+  const sortedEntries = entries.slice();
+  sortedEntries.sort(compareNewestFirst);
+  return sortedEntries;
+}
+
+// Creates one table cell (<td>) with the given text
+function createCell(text) {
+  const cell = document.createElement("td");
+  cell.textContent = text;
+  return cell;
+}
+
+// Creates one table row (<tr>) for an entry
+function createTableRow(entry) {
+  let sleepText = "–";
+  if (entry.sleep !== null) {
+    sleepText = entry.sleep;
+  }
+
+  const row = document.createElement("tr");
+  row.appendChild(createCell(entry.date));
+  row.appendChild(createCell(entry.pain));
+  row.appendChild(createCell(entry.fatigue));
+  row.appendChild(createCell(sleepText));
+  row.appendChild(createCell(entry.note));
+  return row;
+}
+
+// Fills the table with the given entries
+function renderTable(entriesToShow) {
+  // Remove the old rows first, so nothing appears twice
+  entryTableBody.innerHTML = "";
+
+  for (let i = 0; i < entriesToShow.length; i++) {
+    const row = createTableRow(entriesToShow[i]);
+    entryTableBody.appendChild(row);
+  }
+}
+
+// Draws everything on the right side of the page again.
+// Is called after every change. (Summary and chart are added in later steps.)
+function render() {
+  const sortedEntries = getSortedEntries();
+
+  // No entries: show the friendly message instead of an empty table
+  if (sortedEntries.length === 0) {
+    emptyMessage.hidden = false;
+    entryTable.hidden = true;
+    return;
+  }
+
+  emptyMessage.hidden = true;
+  entryTable.hidden = false;
+  renderTable(sortedEntries);
+}
+
 // Runs when the "Save entry" button is clicked
 function handleEntrySubmit(event) {
   // Stop the browser from reloading the page
@@ -121,11 +194,13 @@ function handleEntrySubmit(event) {
     formMessage.textContent = "Entry for " + entry.date + " was saved.";
   }
   resetForm();
+  render();
 }
 
 entryForm.addEventListener("submit", handleEntrySubmit);
 painInput.addEventListener("input", showSliderValues);
 fatigueInput.addEventListener("input", showSliderValues);
 
-// When the page opens: prepare the form (date = today)
+// When the page opens: prepare the form (date = today) and draw the table
 resetForm();
+render();

@@ -117,6 +117,34 @@ input[type="range"] {
   color: var(--muted-text-color);
 }
 
+/* Friendly message when there are no entries yet */
+#empty-message {
+  color: var(--muted-text-color);
+}
+
+/* On small screens the table can be scrolled sideways inside its box */
+.table-wrapper {
+  overflow-x: auto;
+}
+
+/* Entry table */
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+th,
+td {
+  padding: 10px 8px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color);
+}
+
+th {
+  font-size: 16px;
+  color: var(--muted-text-color);
+}
+
 /* Clearly visible focus frame for keyboard users */
 button:focus-visible,
 input:focus-visible,
