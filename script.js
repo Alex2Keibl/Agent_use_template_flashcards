@@ -8,6 +8,30 @@ const germanInput = document.getElementById("german-input");
 const formMessage = document.getElementById("form-message");
 const wordList = document.getElementById("word-list");
 
+// Name under which the word pairs are stored in localStorage
+const storageKey = "wordPairs";
+
+// Saves the wordPairs array in localStorage (as JSON text)
+function saveWordPairs() {
+  const pairsAsText = JSON.stringify(wordPairs);
+  localStorage.setItem(storageKey, pairsAsText);
+}
+
+// Loads saved word pairs from localStorage into the wordPairs array
+function loadWordPairs() {
+  const pairsAsText = localStorage.getItem(storageKey);
+
+  // Nothing saved yet (first visit)
+  if (pairsAsText === null) {
+    return;
+  }
+
+  const savedPairs = JSON.parse(pairsAsText);
+  for (let i = 0; i < savedPairs.length; i++) {
+    wordPairs.push(savedPairs[i]);
+  }
+}
+
 // Checks if both input fields contain text (spaces alone do not count)
 function inputsAreFilled(englishText, germanText) {
   if (englishText === "" || germanText === "") {
@@ -23,6 +47,7 @@ function addWordPair(englishText, germanText) {
     german: germanText
   };
   wordPairs.push(newPair);
+  saveWordPairs();
 }
 
 // Empties both input fields and puts the cursor back in the English field
@@ -35,6 +60,7 @@ function clearForm() {
 // Removes the word pair at the given position and updates the list
 function deleteWordPair(index) {
   wordPairs.splice(index, 1);
+  saveWordPairs();
   showWordList();
 }
 
@@ -89,3 +115,7 @@ function handleFormSubmit(event) {
 }
 
 addForm.addEventListener("submit", handleFormSubmit);
+
+// When the page opens: load saved pairs and show them
+loadWordPairs();
+showWordList();
