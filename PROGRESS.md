@@ -11,13 +11,14 @@
 - Schritt 8: F6 – Zusammenfassung (Ø/min/max Schmerz + Erschöpfung, Bad days), Ø mit 1 Nachkommastelle, bezieht sich auf gewählten Zeitraum, bei 0 Einträgen ausgeblendet
 - Schritt 9: F8 – SVG-Liniendiagramm (von Hand), y-Achse immer 0–10, gestrichelte Linie bei 7, Legende, Pain blau / Fatigue beere, älteste links
 - Schritt 10: F9 – "Load file" mit FileReader, Format date;pain;fatigue;sleep;note, falsche Zeilen übersprungen + gezählt, vorhandene Daten bleiben
-
+- Schritt 11: F10 – "Load sample data": 14 feste Beispieltage bis heute, vorhandene Daten bleiben
+- Alle Features F1–F10 aus SPEC.md umgesetzt
 
 ## Next
-Schritt 11: F10 – "Load sample data" (letzte 14 Tage)
+- Alles im Browser testen (Laptop + Handy-Ansicht)
+- Optional: "Delete all entries", try/catch beim Laden
 
 ## Decisions & notes
-- Schlaf mit Komma (5,5) wird als falsch übersprungen
-- ";" in der Notiz schneidet den Rest ab
+Beispieldaten sind fest (nicht zufällig), damit die Demo immer gleich aussieht
 
 ## Known problems

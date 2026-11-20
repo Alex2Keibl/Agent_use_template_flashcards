@@ -34,6 +34,7 @@ const badDaysCountText = document.getElementById("bad-days-count");
 const loadFileButton = document.getElementById("load-file-button");
 const fileInput = document.getElementById("file-input");
 const importMessage = document.getElementById("import-message");
+const sampleDataButton = document.getElementById("sample-data-button");
 const chartBox = document.getElementById("chart-box");
 const chartSvg = document.getElementById("chart");
 
@@ -315,12 +316,18 @@ function renderTable(entriesToShow) {
   }
 }
 
+// Returns the date from "daysAgo" days before today as "YYYY-MM-DD"
+// Example: 0 = today, 1 = yesterday
+function getDateTextDaysAgo(daysAgo) {
+  const date = new Date();
+  date.setDate(date.getDate() - daysAgo);
+  return formatDateAsText(date);
+}
+
 // Returns the first date of the period as "YYYY-MM-DD".
 // Example: 7 days → today and the 6 days before.
 function getPeriodStartText(days) {
-  const startDate = new Date();
-  startDate.setDate(startDate.getDate() - (days - 1));
-  return formatDateAsText(startDate);
+  return getDateTextDaysAgo(days - 1);
 }
 
 // Returns only the entries inside the selected period
@@ -659,6 +666,46 @@ function handleFileChosen() {
   fileInput.value = "";
 }
 
+// ---------- F10: Sample data for the presentation ----------
+// 14 example days, from the oldest (13 days ago) to the newest (today)
+const samplePain = [3, 4, 5, 6, 7, 8, 6, 5, 4, 3, 4, 6, 7, 5];
+const sampleFatigue = [4, 5, 5, 7, 8, 8, 7, 6, 5, 4, 5, 6, 8, 6];
+const sampleSleep = [7.5, 7, 6.5, 5.5, 4.5, 5, 6, 7, 7.5, 8, 7, 6, 5, 6.5];
+const sampleNotes = ["", "", "", "stiff morning", "flare", "bad night", "", "",
+  "", "physio, felt good", "", "", "long day at uni", ""];
+
+// Creates the sample entry number "index" (0 = oldest, 13 = today)
+function createSampleEntry(index) {
+  const daysAgo = samplePain.length - 1 - index;
+  return {
+    date: getDateTextDaysAgo(daysAgo),
+    pain: samplePain[index],
+    fatigue: sampleFatigue[index],
+    sleep: sampleSleep[index],
+    note: sampleNotes[index]
+  };
+}
+
+// Adds the 14 sample days. Days that already have an entry stay unchanged.
+function loadSampleData() {
+  let addedCount = 0;
+  let existingCount = 0;
+
+  for (let i = 0; i < samplePain.length; i++) {
+    const entry = createSampleEntry(i);
+    if (findEntryIndexByDate(entry.date) === -1) {
+      entries.push(entry);
+      addedCount = addedCount + 1;
+    } else {
+      existingCount = existingCount + 1;
+    }
+  }
+
+  saveEntriesToStorage();
+  render();
+  showImportMessage(addedCount, 0, existingCount);
+}
+
 // Runs when the "Save entry" button is clicked
 function handleEntrySubmit(event) {
   // Stop the browser from reloading the page
@@ -700,6 +747,9 @@ loadFileButton.addEventListener("click", function () {
   fileInput.click();
 });
 fileInput.addEventListener("change", handleFileChosen);
+
+// F10: Sample data button
+sampleDataButton.addEventListener("click", loadSampleData);
 
 // When the page opens: load saved entries, prepare the form (date = today) and draw the table
 loadEntriesFromStorage();
