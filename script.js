@@ -131,6 +131,25 @@ function createCell(text) {
   return cell;
 }
 
+// Returns the CSS class for a pain or fatigue level:
+// 0–3 = low (green), 4–6 = medium (yellow), 7–10 = high (red)
+function getSeverityClass(level) {
+  if (level <= 3) {
+    return "severity-low";
+  }
+  if (level <= 6) {
+    return "severity-medium";
+  }
+  return "severity-high";
+}
+
+// Creates a table cell for a pain or fatigue level, coloured by severity
+function createLevelCell(level) {
+  const cell = createCell(level);
+  cell.className = getSeverityClass(level);
+  return cell;
+}
+
 // Creates one table row (<tr>) for an entry
 function createTableRow(entry) {
   let sleepText = "–";
@@ -140,8 +159,8 @@ function createTableRow(entry) {
 
   const row = document.createElement("tr");
   row.appendChild(createCell(entry.date));
-  row.appendChild(createCell(entry.pain));
-  row.appendChild(createCell(entry.fatigue));
+  row.appendChild(createLevelCell(entry.pain));
+  row.appendChild(createLevelCell(entry.fatigue));
   row.appendChild(createCell(sleepText));
   row.appendChild(createCell(entry.note));
   return row;

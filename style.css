@@ -145,6 +145,26 @@ th {
   color: var(--muted-text-color);
 }
 
+/* F3: Severity colours for pain and fatigue cells (only used here, never for decoration) */
+.severity-low,
+.severity-medium,
+.severity-high {
+  font-weight: bold;
+  text-align: center;
+}
+
+.severity-low {
+  background-color: var(--severity-low);
+}
+
+.severity-medium {
+  background-color: var(--severity-medium);
+}
+
+.severity-high {
+  background-color: var(--severity-high);
+}
+
 /* Clearly visible focus frame for keyboard users */
 button:focus-visible,
 input:focus-visible,
