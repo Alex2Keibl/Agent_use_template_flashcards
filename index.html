@@ -4,10 +4,24 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Vocab Flashcards</title>
+  <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-  <!-- Inhalt folgt in den nächsten Schritten -->
+  <h1>Vocab Flashcards</h1>
+
+  <!-- F1: Formular zum Hinzufügen eines Wortpaares -->
+  <form id="add-form">
+    <label for="english-input">English</label>
+    <input type="text" id="english-input" required>
+
+    <label for="german-input">German</label>
+    <input type="text" id="german-input" required>
+
+    <button type="submit">OK</button>
+  </form>
+
+  <p id="form-message"></p>
 
   <!-- JavaScript am Ende laden, damit die HTML-Elemente schon existieren -->
   <script src="script.js"></script>
