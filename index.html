@@ -65,6 +65,29 @@
         <button type="button" id="period-all-button" class="outline-button" aria-pressed="true">All</button>
       </div>
 
+      <!-- F6: Zusammenfassung für den gewählten Zeitraum (Zahlen kommen aus script.js) -->
+      <div id="summary" class="summary-grid">
+        <div class="summary-card">
+          <h3>Pain</h3>
+          <p>Average: <strong id="pain-average"></strong></p>
+          <p>Lowest: <strong id="pain-lowest"></strong></p>
+          <p>Highest: <strong id="pain-highest"></strong></p>
+        </div>
+
+        <div class="summary-card">
+          <h3>Fatigue</h3>
+          <p>Average: <strong id="fatigue-average"></strong></p>
+          <p>Lowest: <strong id="fatigue-lowest"></strong></p>
+          <p>Highest: <strong id="fatigue-highest"></strong></p>
+        </div>
+
+        <div class="summary-card">
+          <h3>Bad days</h3>
+          <p class="big-number" id="bad-days-count"></p>
+          <p class="summary-hint">pain or fatigue 7 or higher</p>
+        </div>
+      </div>
+
       <!-- Wird angezeigt, solange es noch keine Einträge gibt -->
       <p id="empty-message">No entries yet. Save your first day above.</p>
 

@@ -23,6 +23,14 @@ const entryTableBody = document.getElementById("entry-table-body");
 const period7Button = document.getElementById("period-7-button");
 const period30Button = document.getElementById("period-30-button");
 const periodAllButton = document.getElementById("period-all-button");
+const summaryBox = document.getElementById("summary");
+const painAverageText = document.getElementById("pain-average");
+const painLowestText = document.getElementById("pain-lowest");
+const painHighestText = document.getElementById("pain-highest");
+const fatigueAverageText = document.getElementById("fatigue-average");
+const fatigueLowestText = document.getElementById("fatigue-lowest");
+const fatigueHighestText = document.getElementById("fatigue-highest");
+const badDaysCountText = document.getElementById("bad-days-count");
 
 // F4: Date of the entry whose "Delete?" question is currently shown (null = none)
 let dateToConfirmDelete = null;
@@ -333,7 +341,75 @@ function selectPeriod(days) {
   render();
 }
 
-// Shows the friendly message instead of the table
+// Returns a list of numbers, e.g. all pain values: getLevels(list, "pain") → [4, 6, 7]
+function getLevels(entryList, fieldName) {
+  const levels = [];
+  for (let i = 0; i < entryList.length; i++) {
+    levels.push(entryList[i][fieldName]);
+  }
+  return levels;
+}
+
+// Returns the average of a list of numbers
+function calculateAverage(numbers) {
+  let sum = 0;
+  for (let i = 0; i < numbers.length; i++) {
+    sum = sum + numbers[i];
+  }
+  return sum / numbers.length;
+}
+
+// Returns the smallest number of a list
+function findLowest(numbers) {
+  let lowest = numbers[0];
+  for (let i = 1; i < numbers.length; i++) {
+    if (numbers[i] < lowest) {
+      lowest = numbers[i];
+    }
+  }
+  return lowest;
+}
+
+// Returns the biggest number of a list
+function findHighest(numbers) {
+  let highest = numbers[0];
+  for (let i = 1; i < numbers.length; i++) {
+    if (numbers[i] > highest) {
+      highest = numbers[i];
+    }
+  }
+  return highest;
+}
+
+// Counts the "bad days": pain or fatigue is 7 or higher
+function countBadDays(entryList) {
+  let count = 0;
+  for (let i = 0; i < entryList.length; i++) {
+    if (entryList[i].pain >= 7 || entryList[i].fatigue >= 7) {
+      count = count + 1;
+    }
+  }
+  return count;
+}
+
+// F6: Fills the summary cards with the numbers for the given entries
+function renderSummary(entryList) {
+  const painLevels = getLevels(entryList, "pain");
+  const fatigueLevels = getLevels(entryList, "fatigue");
+
+  // toFixed(1) shows the average with one decimal place, e.g. 5.3
+  painAverageText.textContent = calculateAverage(painLevels).toFixed(1);
+  painLowestText.textContent = findLowest(painLevels);
+  painHighestText.textContent = findHighest(painLevels);
+
+  fatigueAverageText.textContent = calculateAverage(fatigueLevels).toFixed(1);
+  fatigueLowestText.textContent = findLowest(fatigueLevels);
+  fatigueHighestText.textContent = findHighest(fatigueLevels);
+
+  badDaysCountText.textContent = countBadDays(entryList);
+}
+
+// Shows the friendly message instead of the summary and the table
 function showEmptyMessage() {
   if (entries.length === 0) {
     emptyMessage.textContent = "No entries yet. Save your first day above.";
@@ -341,11 +417,12 @@ function showEmptyMessage() {
     emptyMessage.textContent = "No entries in this period. Try a longer period.";
   }
   emptyMessage.hidden = false;
+  summaryBox.hidden = true;
   entryTable.hidden = true;
 }
 
 // Draws everything in the "My days" section again.
-// Is called after every change. (Summary and chart are added in later steps.)
+// Is called after every change. (The chart is added in a later step.)
 function render() {
   updatePeriodButtons();
   const entriesToShow = getEntriesInPeriod(getSortedEntries());
@@ -356,7 +433,9 @@ function render() {
   }
 
   emptyMessage.hidden = true;
+  summaryBox.hidden = false;
   entryTable.hidden = false;
+  renderSummary(entriesToShow);
   renderTable(entriesToShow);
 }
 

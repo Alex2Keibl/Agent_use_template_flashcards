@@ -15,6 +15,12 @@
   --severity-high: #ffcdd2;
 }
 
+/* Elements with the "hidden" attribute are always invisible,
+   even if another rule gives them display: grid or flex */
+[hidden] {
+  display: none !important;
+}
+
 /* Basic page layout: one column, max. 700px wide, centred */
 body {
   max-width: 700px;
@@ -114,6 +120,48 @@ input[type="range"] {
 /* Message below the form ("Entry ... was saved.") */
 #form-message {
   margin-bottom: 0;
+  color: var(--muted-text-color);
+}
+
+/* F6: Summary cards – three next to each other */
+.summary-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr 1fr;
+  gap: 12px;
+  margin-bottom: 24px;
+}
+
+/* On small screens (phone) the cards are shown below each other */
+@media (max-width: 560px) {
+  .summary-grid {
+    grid-template-columns: 1fr;
+  }
+}
+
+.summary-card {
+  padding: 16px;
+  background-color: var(--background-color);
+  border-radius: 8px;
+}
+
+.summary-card h3 {
+  margin: 0 0 8px 0;
+  font-size: 18px;
+}
+
+.summary-card p {
+  margin: 4px 0;
+}
+
+/* Big number for the bad days */
+.big-number {
+  font-size: 36px;
+  font-weight: bold;
+  color: var(--accent-color);
+}
+
+.summary-hint {
+  font-size: 15px;
   color: var(--muted-text-color);
 }
 

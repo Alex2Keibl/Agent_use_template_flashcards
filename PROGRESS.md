@@ -8,12 +8,12 @@
 - Schritt 5: F4 – Löschen mit Rückfrage in der Zeile ("Delete? Yes / No"), Fokus auf "No", Löschen über das Datum
 - Schritt 6: F5 – localStorage (Key "painFatigueEntries"), speichern nach Hinzufügen/Ersetzen/Löschen, laden beim Seitenstart
 - Schritt 7: F7 – Zeitraum-Buttons (7 / 30 Tage / All, Start: All), gewählter Button hervorgehoben (aria-pressed), Tabelle zeigt nur Zeitraum
-
+- Schritt 8: F6 – Zusammenfassung (Ø/min/max Schmerz + Erschöpfung, Bad days), Ø mit 1 Nachkommastelle, bezieht sich auf gewählten Zeitraum, bei 0 Einträgen ausgeblendet
 
 ## Next
-Schritt 8: F6 – Zusammenfassung für den gewählten Zeitraum
+Schritt 9: F8 – SVG-Liniendiagramm
 
 ## Decisions & notes
-"Last 7 days" = heute + 6 Tage davor
+
 
 ## Known problems
