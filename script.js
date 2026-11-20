@@ -20,8 +20,15 @@ const emptyMessage = document.getElementById("empty-message");
 const entryTable = document.getElementById("entry-table");
 const entryTableBody = document.getElementById("entry-table-body");
 
+const period7Button = document.getElementById("period-7-button");
+const period30Button = document.getElementById("period-30-button");
+const periodAllButton = document.getElementById("period-all-button");
+
 // F4: Date of the entry whose "Delete?" question is currently shown (null = none)
 let dateToConfirmDelete = null;
+
+// F7: Selected period in days (7 or 30). 0 means "All".
+let selectedPeriodDays = 0;
 
 // F5: Name under which the entries are stored in localStorage
 const storageKey = "painFatigueEntries";
@@ -47,13 +54,17 @@ function loadEntriesFromStorage() {
   }
 }
 
+// Turns a Date object into text in the format "YYYY-MM-DD"
+function formatDateAsText(date) {
+  const year = date.getFullYear();
+  const month = String(date.getMonth() + 1).padStart(2, "0");
+  const day = String(date.getDate()).padStart(2, "0");
+  return year + "-" + month + "-" + day;
+}
+
 // Returns today's date as text in the format "YYYY-MM-DD"
 function getTodayAsText() {
-  const today = new Date();
-  const year = today.getFullYear();
-  const month = String(today.getMonth() + 1).padStart(2, "0");
-  const day = String(today.getDate()).padStart(2, "0");
-  return year + "-" + month + "-" + day;
+  return formatDateAsText(new Date());
 }
 
 // Shows the current number of both sliders next to their labels
@@ -285,21 +296,68 @@ function renderTable(entriesToShow) {
   }
 }
 
-// Draws everything on the right side of the page again.
+// Returns the first date of the period as "YYYY-MM-DD".
+// Example: 7 days → today and the 6 days before.
+function getPeriodStartText(days) {
+  const startDate = new Date();
+  startDate.setDate(startDate.getDate() - (days - 1));
+  return formatDateAsText(startDate);
+}
+
+// Returns only the entries inside the selected period
+function getEntriesInPeriod(allEntries) {
+  if (selectedPeriodDays === 0) {
+    return allEntries;
+  }
+
+  const startText = getPeriodStartText(selectedPeriodDays);
+  const entriesInPeriod = [];
+  for (let i = 0; i < allEntries.length; i++) {
+    if (allEntries[i].date >= startText) {
+      entriesInPeriod.push(allEntries[i]);
+    }
+  }
+  return entriesInPeriod;
+}
+
+// Highlights the button of the selected period (aria-pressed="true")
+function updatePeriodButtons() {
+  period7Button.setAttribute("aria-pressed", String(selectedPeriodDays === 7));
+  period30Button.setAttribute("aria-pressed", String(selectedPeriodDays === 30));
+  periodAllButton.setAttribute("aria-pressed", String(selectedPeriodDays === 0));
+}
+
+// Runs when a period button is clicked
+function selectPeriod(days) {
+  selectedPeriodDays = days;
+  render();
+}
+
+// Shows the friendly message instead of the table
+function showEmptyMessage() {
+  if (entries.length === 0) {
+    emptyMessage.textContent = "No entries yet. Save your first day above.";
+  } else {
+    emptyMessage.textContent = "No entries in this period. Try a longer period.";
+  }
+  emptyMessage.hidden = false;
+  entryTable.hidden = true;
+}
+
+// Draws everything in the "My days" section again.
 // Is called after every change. (Summary and chart are added in later steps.)
 function render() {
-  const sortedEntries = getSortedEntries();
+  updatePeriodButtons();
+  const entriesToShow = getEntriesInPeriod(getSortedEntries());
 
-  // No entries: show the friendly message instead of an empty table
-  if (sortedEntries.length === 0) {
-    emptyMessage.hidden = false;
-    entryTable.hidden = true;
+  if (entriesToShow.length === 0) {
+    showEmptyMessage();
     return;
   }
 
   emptyMessage.hidden = true;
   entryTable.hidden = false;
-  renderTable(sortedEntries);
+  renderTable(entriesToShow);
 }
 
 // Runs when the "Save entry" button is clicked
@@ -327,6 +385,16 @@ function handleEntrySubmit(event) {
 entryForm.addEventListener("submit", handleEntrySubmit);
 painInput.addEventListener("input", showSliderValues);
 fatigueInput.addEventListener("input", showSliderValues);
+
+period7Button.addEventListener("click", function () {
+  selectPeriod(7);
+});
+period30Button.addEventListener("click", function () {
+  selectPeriod(30);
+});
+periodAllButton.addEventListener("click", function () {
+  selectPeriod(0);
+});
 
 // When the page opens: load saved entries, prepare the form (date = today) and draw the table
 loadEntriesFromStorage();

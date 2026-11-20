@@ -58,6 +58,13 @@
     <section id="results-section" class="card">
       <h2>My days</h2>
 
+      <!-- F7: Zeitraum wählen. aria-pressed="true" markiert den gewählten Button -->
+      <div class="period-buttons" role="group" aria-label="Choose period">
+        <button type="button" id="period-7-button" class="outline-button" aria-pressed="false">Last 7 days</button>
+        <button type="button" id="period-30-button" class="outline-button" aria-pressed="false">Last 30 days</button>
+        <button type="button" id="period-all-button" class="outline-button" aria-pressed="true">All</button>
+      </div>
+
       <!-- Wird angezeigt, solange es noch keine Einträge gibt -->
       <p id="empty-message">No entries yet. Save your first day above.</p>
 

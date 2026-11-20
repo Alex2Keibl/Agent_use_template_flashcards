@@ -7,11 +7,13 @@
 - Schritt 4: F3 – Pain-/Fatigue-Zellen nach Schwere gefärbt (getSeverityClass, createLevelCell), Farben nur dafür verwendet
 - Schritt 5: F4 – Löschen mit Rückfrage in der Zeile ("Delete? Yes / No"), Fokus auf "No", Löschen über das Datum
 - Schritt 6: F5 – localStorage (Key "painFatigueEntries"), speichern nach Hinzufügen/Ersetzen/Löschen, laden beim Seitenstart
+- Schritt 7: F7 – Zeitraum-Buttons (7 / 30 Tage / All, Start: All), gewählter Button hervorgehoben (aria-pressed), Tabelle zeigt nur Zeitraum
+
 
 ## Next
- Schritt 7: F7 – Zeitraum-Buttons (7 Tage, 30 Tage, All)
+Schritt 8: F6 – Zusammenfassung für den gewählten Zeitraum
 
 ## Decisions & notes
+"Last 7 days" = heute + 6 Tage davor
 
 ## Known problems
-Beschädigte Daten in localStorage würden die Seite stoppen (kein try/catch)

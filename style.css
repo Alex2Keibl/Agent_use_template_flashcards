@@ -197,6 +197,20 @@ th {
   font-weight: bold;
 }
 
+/* F7: Period buttons in one row (wrap on small screens) */
+.period-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+/* The selected period button is filled with the accent colour */
+.outline-button[aria-pressed="true"] {
+  color: white;
+  background-color: var(--accent-color);
+}
+
 /* Clearly visible focus frame for keyboard users */
 button:focus-visible,
 input:focus-visible,
