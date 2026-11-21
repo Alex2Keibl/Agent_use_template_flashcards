@@ -8,7 +8,7 @@ F6: Summary
 F7: Period buttons
 F8: Line chart with SVG
 F9: Load entries from a text file
-
+F10: Load sample data
 
 ### What was new to me
 F1: It was new to me to read form values with JavaScript instead of sending them to a server.
@@ -20,7 +20,7 @@ F6: It was new to me to calculate statistics from my own data with JavaScript.
 F7: It was new to me to filter data by date without reloading the page.
 F8: It was new to me to draw a chart myself with SVG, without a library.
 F9: It was new to me that a website can read a file from my computer.
-
+F10: It was new to me to create test data directly in the code.
 
 
 ### New things I did learn
@@ -33,4 +33,4 @@ F6: I learned to calculate the average with reduce() and round it with toFixed(1
 F7: I learned that I can compare dates in JavaScript to show only the chosen period.
 F8: I learned that the y-axis in SVG goes down, so high values need small y numbers.
 F9: I learned to read a file with FileReader and cut the text into lines and values with split().
-
+F10: I learned that sample data makes testing and presenting the website much faster.
