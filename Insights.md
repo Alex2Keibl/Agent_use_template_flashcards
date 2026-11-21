@@ -7,7 +7,7 @@ F5: Save entries in localStorage
 F6: Summary
 F7: Period buttons
 F8: Line chart with SVG
-
+F9: Load entries from a text file
 
 
 ### What was new to me
@@ -19,6 +19,8 @@ F5: It was new to me that data can be saved in the browser without a server.
 F6: It was new to me to calculate statistics from my own data with JavaScript.
 F7: It was new to me to filter data by date without reloading the page.
 F8: It was new to me to draw a chart myself with SVG, without a library.
+F9: It was new to me that a website can read a file from my computer.
+
 
 
 ### New things I did learn
@@ -30,4 +32,5 @@ F5: I learned that localStorage only stores text, so I need JSON.stringify() and
 F6: I learned to calculate the average with reduce() and round it with toFixed(1).
 F7: I learned that I can compare dates in JavaScript to show only the chosen period.
 F8: I learned that the y-axis in SVG goes down, so high values need small y numbers.
+F9: I learned to read a file with FileReader and cut the text into lines and values with split().
 
